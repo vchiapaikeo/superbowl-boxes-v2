@@ -156,15 +156,26 @@ export default function App() {
           </Stack>
         </Box>
         <Container maxWidth="xl" style={{ padding: "1em" }}>
-          <Grid container spacing={1} columns={11}>
-            {loading === true ? (
-              <Box sx={{ width: "100%" }}>
-                <LinearProgress />
-              </Box>
-            ) : (
-              Array.from(Array(121)).map((_, index) => getGridItem(index, names))
-            )}
-          </Grid>
+          <Typography variant="h6" component="h2" style={{ textAlign: "center" }}>
+            Kansas City
+          </Typography>
+
+          <div style={{ display: "inline-flex" }}>
+            <div style={{ writingMode: "tb-rl" }}>
+              <Typography variant="h6" component="h2" style={{ textAlign: "center" }}>
+                Philadelphia
+              </Typography>
+            </div>
+            <Grid container spacing={1} columns={11}>
+              {loading === true ? (
+                <Box sx={{ width: "100%" }}>
+                  <LinearProgress />
+                </Box>
+              ) : (
+                Array.from(Array(121)).map((_, index) => getGridItem(index, names))
+              )}
+            </Grid>
+          </div>
         </Container>
       </main>
       {/* Footer */}
