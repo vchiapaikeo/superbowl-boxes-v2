@@ -121,7 +121,7 @@ export default function App() {
         <Toolbar>
           <HomeIcon sx={{ mr: 2 }} />
           <Typography variant="h6" color="inherit" noWrap>
-            Hometown Fam Super Bowl Boxes 2023 Edition
+            Crossword Crew Super Bowl Boxes 2023 Edition
           </Typography>
         </Toolbar>
       </AppBar>
