@@ -7,36 +7,30 @@ const cors = require("cors");
 // Express 4.x does not support automatic asynchronous error handling and each route needs
 // to handle rejected promises on their own. This middleware catches rejected promises for
 // every route in the overridden methods to format a 500 response and json error message.
-const asyncHandler = fn => (req, res, next) => {
+const asyncHandler = (fn) => (req, res, next) => {
   // default next handler sends back a webpage
-  return Promise
-    .resolve(fn(req, res, next))
-    .catch( (error) => {
-      const errorCode = error.status || 500
-      console.error(`AsyncRouteHandlingError: ${error.name} - ${error.message}`)
-      console.error(error)
-      res.status(errorCode).send({ error: error.message })
-    })
-}
+  return Promise.resolve(fn(req, res, next)).catch((error) => {
+    const errorCode = error.status || 500;
+    console.error(`AsyncRouteHandlingError: ${error.name} - ${error.message}`);
+    console.error(error);
+    res.status(errorCode).send({ error: error.message });
+  });
+};
 
-const asyncOverrideMethods = [
-  'get',
-  'post',
-  'delete'
-]
+const asyncOverrideMethods = ["get", "post", "delete"];
 
 function toAsyncRouter(router) {
   for (let key in router) {
     if (asyncOverrideMethods.includes(key)) {
-      let method = router[key]
-      router[key] = (path, ...callbacks) => method.call(router, path, ...callbacks.map(cb => asyncHandler(cb)))
+      let method = router[key];
+      router[key] = (path, ...callbacks) => method.call(router, path, ...callbacks.map((cb) => asyncHandler(cb)));
     }
   }
-  return router
+  return router;
 }
 
-const app = toAsyncRouter(express())
-const jsonParser = bodyParser.json()
+const app = toAsyncRouter(express());
+const jsonParser = bodyParser.json();
 
 // Middleware
 app.use(cors());
@@ -44,19 +38,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Helper functions
+// From https://stackoverflow.com/a/2450976/5249973
 function shuffle(array) {
-  let currentIndex = array.length,  randomIndex;
+  let currentIndex = array.length,
+    randomIndex;
 
   // While there remain elements to shuffle.
   while (currentIndex != 0) {
-
     // Pick a remaining element.
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
 
     // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
   }
 
   return array;
@@ -76,18 +70,18 @@ app.get("/api/v1/names", async (req, res) => {
   const need = 100 - nonshuffled.length;
   if (includeBlanks === true || includeBlanks === "true") {
     for (let i = 0; i < need; i++) {
-        nonshuffled.push("-")
+      nonshuffled.push("-");
     }
   } else {
     const shuffledNames = shuffle(names);
     for (let i = 0; i < need; i++) {
-        nonshuffled.push(shuffledNames[i])
+      nonshuffled.push(shuffledNames[i]);
     }
   }
 
   const shuffled = shuffle(nonshuffled);
 
-  res.send({names: shuffled});
+  res.send({ names: shuffled });
 });
 
 app.get("/api/v1/readiness_check", async (req, res) => {
@@ -108,4 +102,4 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-module.exports = app
+module.exports = app;
