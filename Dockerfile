@@ -12,7 +12,7 @@ ENV NODE_ENV production
 WORKDIR $HOME
 
 COPY --from=ui-build /usr/src/client/build ./client/build
-# We flatten the directory so that server.js is at /home/sparkhale/server.js
+# We flatten the directory so that server.js is at /home/superbowl-boxes-v2/server.js
 COPY api/ ./
 
 RUN npm -q install
