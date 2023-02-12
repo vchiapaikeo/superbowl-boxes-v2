@@ -37,6 +37,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const cache = {};
+const NAMES_CACHE_KEY = "api/v1/names";
+
 // Helper functions
 // From https://stackoverflow.com/a/2450976/5249973
 function shuffle(array) {
@@ -58,8 +61,12 @@ function shuffle(array) {
 
 // API routes
 app.get("/api/v1/names", async (req, res) => {
-  const includeBlanks = req.query.includeBlanks;
+  if (cache[NAMES_CACHE_KEY] !== undefined) {
+    res.send(cache[NAMES_CACHE_KEY]);
+    return;
+  }
 
+  const includeBlanks = req.query.includeBlanks;
   const names = ["Victor", "Tue", "Haruka", "Jay", "Ephraim", "Linh", "Ryan", "Aya", "Mae"];
   let nonshuffled = [];
   const numArraysNeeded = parseInt(100 / names.length, 10);
@@ -81,7 +88,20 @@ app.get("/api/v1/names", async (req, res) => {
 
   const shuffled = shuffle(nonshuffled);
 
-  res.send({ names: shuffled });
+  res.send({ names: shuffled, saved: false });
+});
+
+app.post("/api/v1/clear", async (req, res) => {
+  console.log("Clearing cache");
+  delete cache[NAMES_CACHE_KEY];
+  res.status(200).json({ success: true });
+});
+
+app.post("/api/v1/names/save", async (req, res) => {
+  const names = req.body;
+  names["saved"] = true;
+  cache[NAMES_CACHE_KEY] = names;
+  res.status(200).json({ success: true });
 });
 
 app.get("/api/v1/readiness_check", async (req, res) => {

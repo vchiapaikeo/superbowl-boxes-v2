@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Alert from '@mui/material/Alert';
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -83,26 +84,35 @@ const getGridItem = (index, names) => {
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [names, setNames] = useState([]);
-  const [save, setSave] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [shouldIncludeBlanks, setShouldIncludeBlanks] = useState(false);
+
+  async function postSave() {
+    const response = await fetch("/api/v1/names/save", {
+      method: "POST",
+      body: JSON.stringify({ names }),
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.status !== 200) throw Error(response);
+    setSaved(true);
+  }
 
   async function getShuffledNames(shouldIncludeBlanks) {
     const response = await fetch(`/api/v1/names?includeBlanks=${shouldIncludeBlanks}`);
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
-
     return body;
   }
 
   function loadNames() {
-    if (save === true) {
+    if (saved === true) {
       return;
     }
     getShuffledNames(shouldIncludeBlanks)
       .then((res) => {
-        console.log(res);
         setLoading(false);
         setNames(res.names);
+        setSaved(res.saved);
       })
       .catch((err) => {
         console.error(err);
@@ -127,18 +137,24 @@ export default function App() {
       </AppBar>
       {/* Main */}
       <main>
+        {saved === true
+          ? <Alert severity="info" style={{ margin: "8px 8px 8px 8px" }}>
+              {`Results have been saved. To reset, send a post request to https://superbowl-boxes-v2-yyht2u2fgq-uc.a.run.app/api/v1/clear`}
+            </Alert>
+          : null
+        }
         <Box
           sx={{
             bgcolor: "background.paper",
-            pt: 6,
-            pb: 4,
+            pt: 4,
+            pb: 2,
           }}
         >
           <Stack sx={{ pt: 1 }} direction="row" spacing={4} justifyContent="center">
-            <Button variant="contained" onClick={() => loadNames()} disabled={save}>
+            <Button variant="contained" onClick={() => loadNames()} disabled={saved}>
               Randomize
             </Button>
-            <Button variant={save ? "outlined" : "contained"} onClick={() => setSave(true)}>
+            <Button variant={saved ? "outlined" : "contained"} onClick={() => postSave()}>
               Save
             </Button>
             <Tooltip title="Should Include Blanks ensures that every name is displayed an equal number of times and will fill empty spaces with a hyphen">
