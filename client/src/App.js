@@ -170,6 +170,11 @@ export default function App() {
               />
             </Tooltip>
           </Stack>
+          <Stack sx={{ pt: 1 }} direction="row" spacing={4} justifyContent="center">
+            <Typography variant="h6" component="h2" style={{ textAlign: "center" }}>
+              Prizes: Q1: $40 - Q2: $40 - Q3: $40 - Q4: $80
+            </Typography>
+          </Stack>
         </Box>
         <Container maxWidth="xl" style={{ padding: "1em" }}>
           <Typography variant="h6" component="h2" style={{ textAlign: "center" }}>
@@ -197,7 +202,6 @@ export default function App() {
       {/* Footer */}
       <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
-          Footer
         </Typography>
         <Typography variant="subtitle1" align="center" color="text.secondary" component="p">
           May the odds be ever in your favor
