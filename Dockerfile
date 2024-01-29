@@ -1,10 +1,10 @@
-FROM node:14.13.1-alpine3.10 AS ui-build
+FROM --platform=linux/amd64 node:14.13.1-alpine3.10 AS ui-build
 
 WORKDIR /usr/src/client
 COPY client/ ./
 RUN npm -q install && npm run build
 
-FROM node:14.13.1-alpine3.10
+FROM --platform=linux/amd64 node:14.13.1-alpine3.10
 
 # General environment config
 ENV HOME /home/superbowl-boxes-v2

@@ -131,7 +131,7 @@ export default function App() {
         <Toolbar>
           <HomeIcon sx={{ mr: 2 }} />
           <Typography variant="h6" color="inherit" noWrap>
-            Crossword Crew Super Bowl Boxes 2023 Edition
+            Super Bowl Boxes 2024 - Family Edition
           </Typography>
         </Toolbar>
       </AppBar>
@@ -179,7 +179,7 @@ export default function App() {
           <div style={{ display: "inline-flex" }}>
             <div style={{ writingMode: "tb-rl" }}>
               <Typography variant="h6" component="h2" style={{ textAlign: "center" }}>
-                Philadelphia
+                San Francisco / Detroit
               </Typography>
             </div>
             <Grid container spacing={1} columns={11}>
