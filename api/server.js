@@ -67,7 +67,7 @@ app.get("/api/v1/names", async (req, res) => {
   }
 
   const includeBlanks = req.query.includeBlanks;
-  const names = ["Victor", "Tue", "Apiram", "Buranawong", "Sangchai", "Supaporn", "Marc", "Wendy", "Kathy", "Jason"]
+  const names = ["Victor", "Tue", "Apiram", "Buranawong", "Sangchai", "Supaporn", "Marc", "Wendy", "Kathy", "Jason", "Louise"]
   let nonshuffled = [];
   const numArraysNeeded = parseInt(100 / names.length, 10);
   for (let i = 0; i < numArraysNeeded; i++) {
